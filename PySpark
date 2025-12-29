@@ -1,0 +1,19 @@
+rom pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("Big Data Project").getOrCreate()
+df = spark.createDataFrame([(i,i%10) for i in range(1000000)], ["Number","Category"])
+df.show(5)
+
+# 10 lakh rows (large data) create
+df = spark.range(1, 1000000)
+
+df.show(5)
+
+df.count()
+
+df2 = df.withColumn("category", df.id % 10)
+df2.show(5)
+
+df2.groupBy("category").count().show()
+
+%time df2.groupBy("category").count().collect()
